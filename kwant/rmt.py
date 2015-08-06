@@ -6,7 +6,7 @@
 # the AUTHORS file at the top-level directory of this distribution and at
 # http://kwant-project.org/authors.
 
-from __future__ import division
+
 
 __all__ = ['gaussian', 'circular']
 

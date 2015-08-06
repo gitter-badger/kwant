@@ -60,7 +60,7 @@ def get_version_from_git():
 version = get_version_from_git()
 if version is None:
     try:
-        from _static_version import version
+        from ._static_version import version
     except:
         version = "unknown"
 
