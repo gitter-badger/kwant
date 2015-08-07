@@ -23,8 +23,7 @@ def get_version_from_git():
         return
     if p.wait() != 0:
         return
-    # TODO: use os.path.samefile once we depend on Python >= 3.3.
-    if os.path.normpath(p.communicate()[0].rstrip('\n')) != distr_root:
+    if os.path.samefile(p.communicate()[0].rstrip(b'\n'), distr_root):
         # The top-level directory of the current Git repository is not the same
         # as the root directory of the Kwant distribution: do not extract the
         # version from Git.
@@ -42,7 +41,7 @@ def get_version_from_git():
             break
     else:
         return
-    version = p.communicate()[0].rstrip('\n')
+    version = p.communicate()[0].rstrip(b'\n')
 
     if version[0] == 'v':
         version = version[1:]
@@ -50,10 +49,10 @@ def get_version_from_git():
     try:
         p = subprocess.Popen(['git', 'diff', '--quiet'], cwd=distr_root)
     except OSError:
-        version += '-confused'  # This should never happen.
+        version += b'-confused'  # This should never happen.
     else:
         if p.wait() == 1:
-            version += '-dirty'
+            version += b'-dirty'
     return version
 
 

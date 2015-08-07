@@ -15,7 +15,7 @@ import re
 import os
 import glob
 import subprocess
-import ConfigParser
+import configparser
 from distutils.core import setup, Extension, Command
 from distutils.util import get_platform
 from distutils.errors import DistutilsError, DistutilsModuleError, \
@@ -34,6 +34,18 @@ NO_CYTHON_OPTION = '--no-cython'
 TUT_DIR = 'tutorial'
 TUT_GLOB = 'doc/source/tutorial/*.py'
 TUT_HIDDEN_PREFIX = '#HIDDEN'
+
+CLASSIFIERS = """\
+Development Status :: 4 - Beta
+Intended Audience :: Science/Research
+Intended Audience :: Developers
+Programming Language :: Python :: 3 :: Only
+Topic :: Software Development
+Topic :: Scientific/Engineering
+Operating System :: POSIX
+Operating System :: Unix
+Operating System :: MacOS :: MacOS X
+Operating System :: Microsoft :: Windows"""
 
 try:
     import Cython
@@ -226,8 +238,7 @@ def get_version_from_git():
         return
     if p.wait() != 0:
         return
-    # TODO: use os.path.samefile once we depend on Python >= 3.3.
-    if os.path.normpath(p.communicate()[0].rstrip('\n')) != distr_root:
+    if os.path.samefile(p.communicate()[0].rstrip(b'\n'), distr_root):
         # The top-level directory of the current Git repository is not the same
         # as the root directory of the Kwant distribution: do not extract the
         # version from Git.
@@ -245,7 +256,7 @@ def get_version_from_git():
             break
     else:
         return
-    version = p.communicate()[0].rstrip('\n')
+    version = p.communicate()[0].rstrip(b'\n')
 
     if version[0] == 'v':
         version = version[1:]
@@ -326,7 +337,7 @@ def search_mumps():
     except OSError:
         pass
     else:
-        p.communicate(input='int main() {}\n')
+        p.communicate(input=b'int main() {}\n')
         if p.wait() == 0:
             return {'libraries': libs}
     return {}
@@ -362,7 +373,7 @@ def extensions():
                       'kwant/graph/c_slicer/slicer.h']})]
 
     #### Add components of Kwant with external compile-time dependencies.
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     try:
         with open(CONFIG_FILE) as f:
             config.readfp(f)
@@ -399,7 +410,7 @@ def extensions():
         if kwrds:
             build_summary.append('Auto-configured MUMPS')
     if kwrds:
-        for name, value in lapack.iteritems():
+        for name, value in lapack.items():
             kwrds.setdefault(name, []).extend(value)
         kwrds.setdefault('depends', []).extend(
             [CONFIG_FILE, 'kwant/linalg/cmumps.pxd'])
@@ -497,7 +508,8 @@ def main():
                     'build_tut': build_tut,
                     'test': test},
           ext_modules=ext_modules(extensions()),
-          include_dirs=[numpy.get_include()])
+          include_dirs=[numpy.get_include()],
+          classifiers=CLASSIFIERS.split('\n'))
 
 if __name__ == '__main__':
     main()
