@@ -258,17 +258,18 @@ def get_version_from_git():
         return
     version = p.communicate()[0].rstrip(b'\n')
 
-    if version[0] == 'v':
+    if version[0] == b'v':
         version = version[1:]
 
     try:
         p = subprocess.Popen(['git', 'diff', '--quiet'], cwd=distr_root)
     except OSError:
-        version += '-confused'  # This should never happen.
+        version += b'-confused'  # This should never happen.
     else:
         if p.wait() == 1:
-            version += '-dirty'
-    return version
+            version += b'-dirty'
+    print(type(version))
+    return version.decode('utf-8')
 
 
 def get_static_version():

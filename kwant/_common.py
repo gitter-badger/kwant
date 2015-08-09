@@ -43,7 +43,7 @@ def get_version_from_git():
         return
     version = p.communicate()[0].rstrip(b'\n')
 
-    if version[0] == 'v':
+    if version[0] == b'v':
         version = version[1:]
 
     try:
@@ -53,7 +53,7 @@ def get_version_from_git():
     else:
         if p.wait() == 1:
             version += b'-dirty'
-    return version
+    return version.decode('utf-8')
 
 
 version = get_version_from_git()
