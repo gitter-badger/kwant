@@ -35,3 +35,8 @@ followed via the `public git repository <http://git.kwant-project.org/kwant>`_.
 
 See also in this directory: `<INSTALL.rst>`_, `<LICENSE.rst>`_, `<AUTHORS.rst>`_,
 `<CITING.rst>`_, `<CONTRIBUTE.rst>`_.
+
+
+.. image:: https://badges.gitter.im/Join%20Chat.svg
+   :alt: Join the chat at https://gitter.im/jbweston/kwant
+   :target: https://gitter.im/jbweston/kwant?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
